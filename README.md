@@ -15,6 +15,7 @@ scrapy crawl　[project名]
 ```
 
 #### 変更箇所
+##### ipa_get.py
 ```
 allowed_domains = ['www.db-siken.com']
 start_urls = ['https://www.db-siken.com']
