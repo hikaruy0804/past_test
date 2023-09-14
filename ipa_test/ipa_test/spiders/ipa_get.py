@@ -1,31 +1,29 @@
 import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
 from ipa_test.items import CrawldownloadItem
 import logging
 
 class IpaGetSpider(scrapy.Spider):
     name = 'ipa_get'
-    allowed_domains = ['www.db-siken.com']
-    start_urls = ['https://www.db-siken.com']
+    allowed_domains = ['www.sc-siken.com'] #科目のURL
+    BASE_URL = 'https://www.sc-siken.com' #科目のURL
+    start_urls = [BASE_URL]
 
     def parse(self, response):
-        o_url = 'https://www.db-siken.com'
-        #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         pre_urls = response.xpath('//ul[@id="testMenu"]/li/a')
-        #print(pre_urls)
         for pre_url in pre_urls:
-            test_url = o_url + pre_url.xpath('./@href').get()
-            print(test_url)
+            test_url = self.BASE_URL + pre_url.xpath('./@href').get()
+            logging.debug(f"Testing URL: {test_url}")
+            
             if test_url != pre_url:
                 yield response.follow(url=test_url, callback=self.parse_item)
                 
     def parse_item(self, response):
-        #print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-        for data in response.xpath('//td/i[@class="pdf"]'):
-            print(data)
+        title_part1 = response.xpath('//div[@class="pan"]/b/text()').get() or ""
+        data_list = response.xpath('//td/i[@class="pdf"]')
+        for data in data_list:
             item = CrawldownloadItem()
-            item['title'] = response.xpath('//div[@class="pan"]/b/text()').get() + data.xpath('./following-sibling::a/text()').get()
-            item['file_urls'] = [ data.xpath('./following-sibling::a/@href').get() ]
-            #item['files'] = data.xpath('./following-sibling::a/@href').get()
+            title_part2 = data.xpath('./following-sibling::a/text()').get() or ""
+            item['title'] = title_part1 + title_part2
+            pdf_url = response.urljoin(data.xpath('./following-sibling::a/@href').get())
+            item['file_urls'] = [pdf_url]
             yield item
