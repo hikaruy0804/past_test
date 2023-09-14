@@ -4,8 +4,8 @@ import logging
 
 class IpaGetSpider(scrapy.Spider):
     name = 'ipa_get'
-    allowed_domains = ['www.sc-siken.com'] #科目のURL
-    BASE_URL = 'https://www.sc-siken.com' #科目のURL
+    allowed_domains = ['www.db-siken.com'] #科目のURL
+    BASE_URL = 'https://www.db-siken.com' #科目のURL
     start_urls = [BASE_URL]
 
     def parse(self, response):
@@ -27,3 +27,4 @@ class IpaGetSpider(scrapy.Spider):
             pdf_url = response.urljoin(data.xpath('./following-sibling::a/@href').get())
             item['file_urls'] = [pdf_url]
             yield item
+
