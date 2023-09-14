@@ -34,7 +34,6 @@ downloadフォルダが作成されpdfファイルがDLされます。
 ### ipa_get.py
 過去問道場のURLです。
 ```
-allowed_domains = ['www.db-siken.com']
-start_urls = ['https://www.db-siken.com']
-o_url = 'https://www.db-siken.com'
+allowed_domains = ['www.db-siken.com'] #科目のURL
+BASE_URL = 'https://www.db-siken.com' #科目のURL
 ```
