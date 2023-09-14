@@ -1,22 +1,11 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# useful for handling different item types with a single interface
-
-#from itemadapter import ItemAdapter
 from scrapy.pipelines.files import FilesPipeline
 import os
+import re
 
 class CrawldownloadPipeline(FilesPipeline):
-    def file_path(self, request, response=None, info=None):
-        file_paths = request.url.split("/")
-        file_paths.pop(0) # https:
-        file_paths.pop(0) #//
-        file_name = os.path.join(*file_paths)
-        pos = file_name.find('2')
-        file_name[:pos]
-        #print('aaddddddddddddddddddddddddd')
-        return file_name
+    def file_path(self, request,response=None, info=None):
+
+        unwanted_pattern = r'shiken/mondai-kaiotu/[a-z0-9\-]+-att/'
+        cleaned_path = re.sub(unwanted_pattern, '', request.url) # 不要な部分を置き換え
+        path_parts = cleaned_path.split("/")
+        return os.path.join(*path_parts[2:]) # 最初の2つの部分（https: と ドメイン名）をスキップして結合
