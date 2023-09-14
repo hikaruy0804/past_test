@@ -1,30 +1,37 @@
-# past_test
+# IPA過去問ダウンロード
 
-
-## IPA試験の過去問集めるの大変ですね。
-面倒くさいことはプログラムに任せましょう。
-過去問道場経由でダウンロードします。
+## IPA試験の過去問集めるの面倒ですよね。
+過去問道場経由でIPAの過去問をダウンロードします。
 DBの過去問をダウンロードしますが、URLを変えると他の科目でも大丈夫だと思います。
 
 ## 準備
-### ローカルにipa_testを保存
+### 1.ローカルにipa_testを保存
 
-### ライブラリインストール
+### 2.ライブラリインストール
 
 ```
 pip install scrapy
 ```
 
-### 起動
-
-### 起動
-
+### 3.ディレクトリ移動
 ```
-scrapy crawl　[project名]
+cd ipa_test/ipa_test
 ```
 
-## 変更箇所
+### 4.起動
+
+```
+scrapy crawl　ipa_get
+```
+
+### 5.完了
+downloadフォルダが作成されpdfファイルがDLされます。
+
+欲しい科目の過去問道場のURLに変更してください。
+
+## URL変更箇所
 ### ipa_get.py
+過去問道場のURLです。
 ```
 allowed_domains = ['www.db-siken.com']
 start_urls = ['https://www.db-siken.com']
